@@ -1,0 +1,174 @@
+<?xml version="1.0"?>
+<robot name="aogaku_crane">
+  <link name="planeLink">
+    <contact>
+      <lateral_friction value="1"/>
+    </contact>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value=".0"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="plane100.obj" scale="1 1 1"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 -5"/>
+      <geometry>
+        <box size="200 200 10"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="planeLink_base" type="fixed">
+    <parent link="planeLink"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <link name="base_link">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.4235"/>
+      <mass value="900"/>
+      <inertia ixx="100000" ixy="0.0" ixz="0.0" iyy="10000000" iyz="0.0" izz="10000000"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.4235"/>
+      <geometry>
+        <box size="0.35 0.35 0.847"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.4235"/>
+      <geometry>
+        <box size="0.35 0.35 0.847"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="turning" type="revolute">
+    <parent link="base_link"/>
+    <child link="base1"/>
+    <limit lower="-1.833" upper="1.833" effort="1000" velocity="100"/>
+    <dynamics damping="1" friction="1"/>
+    <origin xyz="0 0.031 0.847" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+  <link name="base1">
+    <inertial>
+      <origin rpy = "0 0 0" xyz = "0 0 0" />
+      <mass value = "0.0001" />
+      <inertia ixx = "0.0001" ixy = "0" ixz = "0" iyy = "0.0001" iyz = "0" izz = "0.0001" />
+    </inertial>
+  </link>
+  <joint name="fluctuation" type="revolute">
+    <parent link="base1"/>
+    <child link="boom"/>
+    <limit lower="0" upper="1.0472" effort="1000" velocity="100"/>
+    <dynamics damping="1" friction="1"/>
+    <origin xyz="0 0 0" rpy="-1.0472 0 0"/>
+    <axis xyz="1 0 0"/>
+  </joint>
+  <link name="boom">
+    <inertial>
+      <origin xyz="0 0 1" rpy="0 0 0"/>
+      <mass value="4.86"/>
+      <inertia ixx="0.533" ixy="0.0" ixz="0.0" iyy="0.ooo12" iyz="0.0" izz="0.533"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 1" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.030 0.030 2"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 1" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.030 0.030 2"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="boom_straing_x" type="continuous">
+    <parent link="boom"/>
+    <child link="base2"/>
+    <origin xyz="0 0 2" rpy="1.0472 0 0"/>
+    <axis xyz="1 0 0"/>
+    <dynamics damping="0.1" friction="1"/>
+  </joint>
+  <link name="base2">
+    <inertial>
+      <origin rpy = "0 0 0" xyz = "0 0 0" />
+      <mass value = "0.0001" />
+      <inertia ixx = "0.0001" ixy = "0" ixz = "0" iyy = "0.0001" iyz = "0" izz = "0.0001" />
+    </inertial>
+  </link>
+  <joint name="boom_string_y" type="continuous">
+    <parent link="base2"/>
+    <child link="base3"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="1" friction="1.0"/>
+  </joint>
+  <link name="base3">
+    <inertial>
+      <origin rpy = "0 0 0" xyz = "0 0 0" />
+      <mass value = "0.0001" />
+      <inertia ixx = "0.0001" ixy = "0" ixz = "0" iyy = "0.0001" iyz = "0" izz = "0.0001" />
+    </inertial>
+  </link>
+  <joint name="boom_string_z" type="continuous">
+    <parent link="base3"/>
+    <child link="string"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="1" friction="1.0"/>
+  </joint>
+  <link name="string">
+    <inertial>
+      <origin xyz="0 0 -0.5" rpy="0 0 0"/>
+      <mass value="0.02496"/>
+      <inertia ixx="0.014" ixy="0.0" ixz="0.0" iyy="0.014" iyz="0.0" izz="0.000000007"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -0.5" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius=".00075" length="1"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.5" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius=".00075" length="1"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="string_mass" type="fixed">
+    <parent link="string"/>
+    <child link="mass"/>
+    <origin xyz="0 0 -1" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+  <link name="mass">
+    <inertial>
+      <origin xyz="0 0 -.04" rpy="0 0 0"/>
+      <mass value="0.2"/>
+      <inertia ixx="0.027" ixy="0.0" ixz="0.0" iyy="0.027" iyz="0.0" izz="0.0023"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -.04" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius=".040"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -.04" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius=".040"/>
+      </geometry>
+    </collision>
+  </link>
+</robot>

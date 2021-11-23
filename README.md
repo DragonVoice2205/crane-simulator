@@ -1,1 +1,1 @@
-# crane-simulatot
+# crane-simulator
